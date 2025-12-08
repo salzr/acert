@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package v1;
+
+option go_package = "github.com/salzr/proto/agentservice/v1";
+
+service AgentService {
+  rpc Poll(stream AgentRequest) returns (stream AgentResponse);
+}
+
+message AgentRequest {
+  string agent_id = 1;
+  oneof payload {
+    AgentHeartbeat heartbeat = 2;
+  }
+}
+
+message AgentResponse {
+  oneof payload {
+    ServerTask server_task = 1;
+    ServerStatus server_status = 2;
+  }
+}
+
+message AgentHeartbeat {
+  int64 timestamp = 1;
+}
+
+message ServerTask {
+  string task_id = 1;
+  string command = 2;
+}
+
+message ServerStatus {
+  string message = 1;
+}

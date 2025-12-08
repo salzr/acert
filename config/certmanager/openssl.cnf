@@ -1,0 +1,13 @@
+[req]
+distinguished_name = req_distinguised_name
+attributes = req_attributes
+
+[req_distinguised_name]
+
+[req_attributes]
+
+[test_client]
+basicConstraints     = critical,CA:FALSE
+subjectKeyIdentifier = hash
+keyUsage             = critical,nonRepudiation,digitalSignature,keyEncipherment
+extendedKeyUsage     = critical,clientAuth

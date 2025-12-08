@@ -1,0 +1,103 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigned-ca-issuer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: acert-server-ca
+  namespace: acert-system
+spec:
+  isCA: true
+  duration: 87600h
+  secretName: acert-server-ca-secret
+  commonName: acert-server-ca
+  subject:
+    countries: 
+    - US
+    provinces:
+    - FL
+    localities:
+    - Miami
+    organizations:
+    - gRPC
+  privateKey:
+    algorithm: RSA
+    size: 4096
+  usages:
+  - cert sign
+  issuerRef:
+    name: selfsigned-ca-issuer
+    kind: ClusterIssuer
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: acert-cluster-certificate-issuer
+  namespace: acert-system
+spec:
+  ca:
+    secretName: acert-server-ca-secret
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: acert-grpc-server
+  namespace: acert-system
+spec:
+  duration: 87600h
+  secretName: acert-grpc-server-crt
+  commonName: acert-server-crt
+  subject:
+    countries: 
+    - US
+    provinces:
+    - FL
+    localities:
+    - Miami
+    organizations:
+    - gRPC
+  dnsNames:
+  - "server.acert.salzr.localhost"
+  privateKey:
+    algorithm: RSA
+    size: 4096
+  signatureAlgorithm: SHA256WithRSA
+  usages:
+  - digital signature
+  - key encipherment
+  - key agreement
+  issuerRef:
+    name: acert-cluster-certificate-issuer
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: acert-agent-ca
+  namespace: acert-system
+spec:
+  isCA: true
+  duration: 87600h
+  secretName: acert-agent-ca-secret
+  commonName: acert-agent-ca
+  subject:
+    countries: 
+    - US
+    provinces:
+    - FL
+    localities:
+    - Miami
+    organizations:
+    - gRPC
+  privateKey:
+    algorithm: RSA
+    size: 4096
+  usages:
+  - cert sign
+  issuerRef:
+    name: selfsigned-ca-issuer
+    kind: ClusterIssuer

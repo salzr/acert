@@ -52,7 +52,7 @@ func InstallOrUpdate(ctx context.Context, chart Chart, values map[string]interfa
 	logger := ctx.Value("logger").(*zap.Logger)
 	logger = logger.With(zap.String("service", "helm"))
 
-	configFlags := genericclioptions.NewConfigFlags(true)
+	configFlags := ctx.Value("configFlags").(*genericclioptions.ConfigFlags)
 	actionConfig := new(action.Configuration)
 	if err := actionConfig.Init(configFlags, "cert-manager", "secret", logger.Sugar().Debugf); err != nil {
 		return nil, err

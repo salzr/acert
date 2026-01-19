@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/salzr/acert/cmd/bootstrap"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 
@@ -37,6 +38,7 @@ func init() {
 	ctx = context.WithValue(ctx, "logger", logger)
 
 	rootCmd.SetContext(ctx)
+	rootCmd.AddCommand(bootstrap.Command())
 	rootCmd.AddCommand(agent.Command())
 	rootCmd.AddCommand(server.Command())
 }
